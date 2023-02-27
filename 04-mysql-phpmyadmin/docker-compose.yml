@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  db:
+    image: mysql
+    container_name: db #Wenn container Name geändert wird auch bei phpmyadmin ändern
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mySecretPaswd #MySQL Root Passwort
+    volumes:
+      - /data/app_data/mysql:/var/lib/mysql:rw
+    ports:
+      - 3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    links:
+      - "db" #Hier den Conatiner namen des DB Containers ändern
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8083:80

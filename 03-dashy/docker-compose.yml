@@ -1,0 +1,21 @@
+version: '3'
+
+networks:
+  traefik_web:
+    external: true
+
+services:
+  dashy:
+    image: lissy93/dashy
+    container_name: dashy
+    volumes:
+      - /data/app_data/dashy/dashy_conf.yml:/app/public/conf.yml
+    networks:
+      - traefik_web
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashy.entrypoints=web, websecure"
+      - "traefik.http.routers.dashy.rule=Host(`dashy.zuhause`)" #DNS Namen für App festlegen
+      - "traefik.htpp.routers.dashy.tls=true"
+      - "traefik.http.routers.dashy.tls.certresolver=production"

@@ -1,0 +1,19 @@
+version: '3'
+
+networks:
+  traefik_web:
+    external: true
+
+services:
+  grafana:
+    image: grafana/grafana-oss
+    container_name: grafana
+    networks:
+      - traefik_web
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.entrypoints=web, websecure"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.zuhause`)" #DNS Namen für App festlegen
+      - "traefik.htpp.routers.grafana.tls=true"
+      - "traefik.http.routers.grafana.tls.certresolver=production"

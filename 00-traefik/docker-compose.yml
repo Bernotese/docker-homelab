@@ -1,0 +1,21 @@
+version: '3'
+
+networks:
+  traefik_web:
+    external: true
+
+services:
+  traefik:
+    image: "traefik:v2.5"
+    container_name: traefik
+    command: "--log.level=DEBUG"
+    networks:
+      - traefik_web
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8081:8080" #Daschboard Anzeige
+    volumes:
+      - "/data/app_data/traefik/etc-traefik:/etc/traefik"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/data/app_data/traefik/ssl-certs:/ssl-certs"

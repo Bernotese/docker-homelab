@@ -1,0 +1,21 @@
+version: '3'
+
+networks:
+  traefik_web:
+    external: true
+
+services:
+ nextcloud:
+    container_name: nextcloud
+    image: nextcloud
+    restart: always
+    networks:
+      - traefik_web
+    volumes:
+      - /data/app_data/nextcloud:/var/www/html
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nextcloud.entrypoints=web, websecure"
+      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.zuhause`)" #DNS Namen für App festlegen
+      - "traefik.htpp.routers.nextcloud.tls=true"
+      - "traefik.http.routers.nextcloud.tls.certresolver=production"

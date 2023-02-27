@@ -1,0 +1,22 @@
+version: '3'
+
+networks:
+  traefik_web:
+    external: true
+
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma
+    container_name: kuma
+    restart: always
+    networks:
+      - traefik_web
+    volumes:
+      - /data/app_data/uptime-kuma:/app/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.kuma.entrypoints=web, websecure"
+      - "traefik.http.routers.kuma.rule=Host(`kuma.zuhause`)" #DNS Namen für App festlegen
+      - "traefik.htpp.routers.kuma.tls=true"
+      - "traefik.http.routers.kuma.tls.certresolver=production"
+      - "traefik.http.services.kuma.loadBalancer.server.port=3001"
